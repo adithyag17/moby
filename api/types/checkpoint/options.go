@@ -5,6 +5,8 @@ type CreateOptions struct {
 	CheckpointID  string
 	CheckpointDir string
 	Exit          bool
+	PreDump       bool
+	ParentDir     string
 }
 
 // ListOptions holds parameters to list checkpoints for a container.

@@ -2,13 +2,16 @@ package checkpoint // import "github.com/docker/docker/api/server/router/checkpo
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
+	"github.com/containerd/log"
 	"github.com/docker/docker/api/server/httputils"
 	"github.com/docker/docker/api/types/checkpoint"
 )
 
 func (s *checkpointRouter) postContainerCheckpoint(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
+	log.G(context.TODO()).Debugf("fjouweufiwreinjfniwerfniwf")
 	if err := httputils.ParseForm(r); err != nil {
 		return err
 	}
@@ -17,6 +20,7 @@ func (s *checkpointRouter) postContainerCheckpoint(ctx context.Context, w http.R
 	if err := httputils.ReadJSON(r, &options); err != nil {
 		return err
 	}
+	fmt.Printf("%+v\n", options)
 
 	err := s.backend.CheckpointCreate(vars["name"], options)
 	if err != nil {
