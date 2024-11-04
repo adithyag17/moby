@@ -423,7 +423,7 @@ func (c *container) getCheckpointOptions(exit bool) containerd.CheckpointTaskOpt
 	}
 }
 
-func (t *task) CreateCheckpoint(ctx context.Context, checkpointDir string, exit bool) error {
+func (t *task) CreateCheckpoint(ctx context.Context, checkpointDir string, exit bool, preDump bool, parentDir string) error {
 	img, err := t.Task.Checkpoint(ctx, t.ctr.getCheckpointOptions(exit))
 	if err != nil {
 		return wrapError(err)

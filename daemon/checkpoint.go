@@ -73,7 +73,7 @@ func (daemon *Daemon) CheckpointCreate(name string, config checkpoint.CreateOpti
 	if err != nil {
 		return fmt.Errorf("cannot checkpoint container %s: %s", name, err)
 	}
-	if config.preDump == true {
+	if config.PreDump == true {
 		err = tsk.CreateCheckpoint(context.Background(), checkpointDir, config.Exit, config.PreDump, config.ParentDir)
 	} else {
 		err = tsk.CreateCheckpoint(context.Background(), checkpointDir, config.Exit, false, "")
