@@ -28,6 +28,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/containerd/log"
+
 	"github.com/containerd/containerd/api/services/tasks/v1"
 	"github.com/containerd/containerd/api/types"
 	"github.com/containerd/containerd/cio"
@@ -439,6 +441,7 @@ func (t *task) Resize(ctx context.Context, w, h uint32) error {
 // NOTE: Checkpoint supports to dump task information to a directory, in this way, an empty
 // OCI Index will be returned.
 func (t *task) Checkpoint(ctx context.Context, opts ...CheckpointTaskOpts) (Image, error) {
+	log.G(ctx).Debugf("Task Checkpoint Started")
 	ctx, done, err := t.client.WithLease(ctx)
 	if err != nil {
 		return nil, err
@@ -448,7 +451,7 @@ func (t *task) Checkpoint(ctx context.Context, opts ...CheckpointTaskOpts) (Imag
 	if err != nil {
 		return nil, err
 	}
-
+	log.G(ctx).Debugf("Making task request")
 	request := &tasks.CheckpointTaskRequest{
 		ContainerID: t.id,
 	}
@@ -492,6 +495,7 @@ func (t *task) Checkpoint(ctx context.Context, opts ...CheckpointTaskOpts) (Imag
 		},
 		Annotations: make(map[string]string),
 	}
+	log.G(ctx).Debugf("Calling checkpointTask")
 	if err := t.checkpointTask(ctx, &index, request); err != nil {
 		return nil, err
 	}
@@ -614,7 +618,9 @@ func (t *task) Metrics(ctx context.Context) (*types.Metric, error) {
 }
 
 func (t *task) checkpointTask(ctx context.Context, index *v1.Index, request *tasks.CheckpointTaskRequest) error {
+	log.G(ctx).Debugf("GRPC done")
 	response, err := t.client.TaskService().Checkpoint(ctx, request)
+	log.G(ctx).Debugf("GRPC done")
 	if err != nil {
 		return errdefs.FromGRPC(err)
 	}
